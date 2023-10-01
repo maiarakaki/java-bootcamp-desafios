@@ -2,7 +2,7 @@ package ar.com.educacionit.desafios.desafio2;
 
 import java.util.Scanner;
 
-public class Main {
+public class MainD2 {
 
 	public static void main(String[] args) {
 		Scanner teclado = new Scanner(System.in);
