@@ -1,4 +1,4 @@
-package ar.com.educacionit.desafios;
+package ar.com.educacionit.desafios.desafio2;
 
 public class Calculadora {
 	public static Alumno[] obtenerMejoresAlumnos(Alumno[] alumnos) {

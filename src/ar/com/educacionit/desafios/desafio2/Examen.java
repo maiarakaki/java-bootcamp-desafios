@@ -1,4 +1,4 @@
-package ar.com.educacionit.desafios;
+package ar.com.educacionit.desafios.desafio2;
 
 public class Examen {
 	private short numero;
