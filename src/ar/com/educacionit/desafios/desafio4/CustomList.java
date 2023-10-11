@@ -1,16 +1,15 @@
 package ar.com.educacionit.desafios.desafio4;
 
 
-public class CustomList <T extends Comparable<T> >implements CollectionCustom<T> {
+public class CustomList <T>implements CollectionCustom<T> {
 	//esta implementacion tiene problemas de casteo de Clases, no puedo instanciar
 	//los valores sin hacer lo de la linea 12 pero luego rompe al tratar de operar...
 	private T[] valores;
 	private int size = 0;
 	
-	@SuppressWarnings("unchecked")
 	public CustomList() {
-		valores = (T[]) new Object[1];
-		size = 1;
+		valores = (T[]) new Object[size];
+		System.out.println("La lista se ha creado correctamente");
 	}
 
 	@Override
@@ -20,120 +19,99 @@ public class CustomList <T extends Comparable<T> >implements CollectionCustom<T>
 
 	@Override
 	public void addFirst(T item) {
-		//agrega el item que viene por parametro a la lista en la primera posición
-		if (item !=null && size == 0) {
-			valores[0] = item;
-			size = 1;
-//			lastPos = 1;
-			return;
-		}
-		
-		if(item != null) {
-			//redimensionar el array
-			T[] nuevoArray = expandArray();
-			
-			//mover todos los elementos una posición
-			
-			for (int i = size -1 ; i > 0 ; i-- ) {
-				nuevoArray[i] = nuevoArray[i-1];
+		if(size == 0) {
+			addLast(item);
+		} else {
+			T[]auxList = (T[]) new Object[size+1];
+			auxList[0] = item;
+			for(int i = size ; i > 0 ; i--) {
+				auxList[i] = valores[i-1];
 			}
-			
-			nuevoArray[0] = item;
-			size ++;
+			valores = auxList;
+			size++;
 		}
-		
-		return;
-		
-	}
-	
-	private T[]expandArray(){
-		//devuelve una copia del arreglo original con una posicion extra
-		@SuppressWarnings("unchecked")
-		T[] aux = (T[])new Object[size + 1];
-		
-		for(int i = 0 ; i < size ; i ++) {
-			aux[i] = valores[i];
-		}
-		return aux;
 	}
 
 	@Override
 	public void addLast(T item) {
-		if(size == 0 && item!= null) {
-			valores[0] = item;
-			size = 1;
-//			lastPos = 1;
-			return;
+		T[]auxList = (T[]) new Object[size+1];
+		
+		for(int i = 0; i < size ; i++) {
+			auxList[i] = valores[i];
 		}
 		
-		if(item != null) {
-			Object[] nuevoArray = expandArray();
-			nuevoArray[nuevoArray.length -1] = item;
-			size = nuevoArray.length;	
-		}
+		auxList[size] = item;
+		valores = auxList;
+		size++;
 	}
 
 	@Override
 	public void add(T item) {
 		addLast(item);
 	}
+	
+	private int find(T item) {
+		boolean found = false;
+		int iterator = 0;
+		while(!found && iterator < size){
+			if(item.equals(valores[iterator])) {
+				found = true;
+				System.out.println("FOUND!!!");
+			}
+			
+			iterator++;
+		}
+		return iterator-1;
+	}
+	
+	private T[] compact(int index) {
+		T[]aux = (T[]) new Object[size-1];
+		var i = 0;
+		var j = 0;
+		while (i < size) {
+			if(i != index) {
+				aux[j] = valores[i];
+				j++;
+			}
+			i++;
+		}
+		
+		return aux;
+	}
 
 	@Override
 	public T remove(T item) {
-		if (item == null || size ==0) {
-			return null;
-		}
-		
-		boolean found = false;
-		int i = 0;
-		T valorBuscado = null;
-		
-		while(!found && i < size) {
-			if(valores[i].equals(item)) {
-				found = true;
-				valorBuscado =(T) valores[i];
-			}
-			
-			i++;
-		}
-		if(found) {
-			int index = i-1;
-			//desplazo todos los items existentes una posicion a la izquierda desde la posicion index
-			
-			while(i < size) {
-				valores[index] = valores[i];
-				i++;
-				index++;
-			}
-			
-			//redimensiono el arreglo restandole una posicion
-			@SuppressWarnings("unchecked")
-			T[] aux = (T[])new Object[size -1];
-			
-			//copio los valores 
-			for(int j = 0 ; j < aux.length ; j++) {
-				aux[j] = valores[j];
-			}
-			//actualizo valores
-			valores = aux;
-			//actualizo el size
+		T lookup = null;
+		int index = find(item);
+		if(index == -1) {
+			System.out.println("item no encontrado");
+		} else {
+			lookup = valores[index];
+			valores = compact(index);
 			size --;
 		}
-		
-		return valorBuscado;
+		return lookup;
 	}
 
 	@Override
 	public void removeAll() {
-		// TODO Auto-generated method stub
-		
+		int i =0;
+		while(size >0 && i >= 0 ) {
+			i = size;
+			remove(valores[i-1]);
+		}
 	}
 
 	@Override
 	public boolean empty() {
-		// TODO Auto-generated method stub
 		return size == 0;
 	}
 
+	public void showValues() {
+
+		for(int i = 0 ; i < size ; i++) {
+			System.out.println(valores[i]);
+		}
+	}
 
 }
