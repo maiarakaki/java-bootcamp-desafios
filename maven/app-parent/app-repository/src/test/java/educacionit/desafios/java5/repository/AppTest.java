@@ -1,4 +1,4 @@
-package educacionit.desafios.java5.app_parent;
+package educacionit.desafios.java5.repository;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
